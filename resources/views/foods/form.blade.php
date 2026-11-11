@@ -1,6 +1,11 @@
-<x-app title="Tambah Makanan">
-    <form action="{{ route('foods.store') }}" method="POST">
+@php($isEditing = $food->exists)
+
+<x-app :title="$isEditing ? 'Edit Makanan' : 'Tambah Makanan'">
+    <form action="{{ $isEditing ? route('foods.update', $food) : route('foods.store') }}" method="POST">
         @csrf
+        @if ($isEditing)
+            @method('PUT')
+        @endif
 
         <div class="mb-3">
             <label class="form-label" for="name">Nama makanan</label>
@@ -50,7 +55,9 @@
 
         <div class="d-flex gap-2">
             <a class="btn btn-warning" href="{{ route('foods.index') }}" role="button">Batal</a>
-            <button type="submit" class="btn btn-primary">Simpan makanan</button>
+            <button type="submit" class="btn btn-primary">
+                {{ $isEditing ? 'Simpan perubahan' : 'Simpan makanan' }}
+            </button>
         </div>
     </form>
 </x-app>

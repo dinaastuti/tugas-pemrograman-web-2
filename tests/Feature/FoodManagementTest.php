@@ -102,3 +102,33 @@ it('rejects invalid food data when creating a product', function () {
 
     $this->assertDatabaseCount('foods', 0);
 });
+
+it('shows the edit form and updates an existing food product', function () {
+    $food = Food::factory()->create([
+        'name' => 'Nasi Goreng',
+        'category' => 'Makanan Berat',
+        'price' => 25000,
+        'stock' => 12,
+    ]);
+
+    $this->get(route('foods.edit', $food))
+        ->assertOk()
+        ->assertSee('Edit Makanan')
+        ->assertSee('value="Nasi Goreng"', false);
+
+    $this->put(route('foods.update', $food), [
+        'name' => 'Nasi Goreng Spesial',
+        'category' => 'Makanan Cepat Saji',
+        'price' => '30000.50',
+        'stock' => '4',
+    ])->assertRedirect(route('foods.index'))
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseHas('foods', [
+        'id' => $food->id,
+        'name' => 'Nasi Goreng Spesial',
+        'category' => 'Makanan Cepat Saji',
+        'price' => 30000.5,
+        'stock' => 4,
+    ]);
+});

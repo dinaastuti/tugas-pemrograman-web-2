@@ -47,6 +47,7 @@
                         <th scope="col">Kategori</th>
                         <th scope="col">Harga</th>
                         <th scope="col">Stok</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,6 +57,9 @@
                             <td>{{ $food->category }}</td>
                             <td>Rp {{ number_format((float) $food->price, 0, ',', '.') }}</td>
                             <td>{{ $food->stock }}</td>
+                            <td>
+                                <a href="{{ route('foods.edit', $food) }}" class="btn btn-warning">Edit</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

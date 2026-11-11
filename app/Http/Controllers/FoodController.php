@@ -53,6 +53,21 @@ class FoodController extends Controller
         return redirect()->route('foods.index')->with('success', 'Makanan berhasil ditambahkan.');
     }
 
+    public function edit(Food $food): View
+    {
+        return view('foods.form', [
+            'food' => $food,
+            'categories' => Food::CATEGORIES,
+        ]);
+    }
+
+    public function update(Request $request, Food $food): RedirectResponse
+    {
+        $food->update($this->validatedData($request));
+
+        return redirect()->route('foods.index')->with('success', 'Perubahan makanan berhasil disimpan.');
+    }
+
     /**
      * @return array{name: string, category: string, price: string, stock: int}
      */
