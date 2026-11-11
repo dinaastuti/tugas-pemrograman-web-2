@@ -3,6 +3,10 @@
         <h2>Daftar Produk</h2>
     </div>
 
+    <a class="btn btn-primary mb-3" href="{{ route('foods.create') }}" role="button">
+        Tambah makanan
+    </a>
+
     <form class="row g-3 align-items-end mb-4" action="{{ route('foods.index') }}" method="GET">
         <div class="col-md-5">
             <label class="form-label" for="search">Cari nama</label>

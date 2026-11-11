@@ -69,3 +69,36 @@ it('shows an empty state and rejects invalid listing filters', function () {
     $this->get(route('foods.index', ['sort' => 'id desc']))
         ->assertSessionHasErrors('sort');
 });
+
+it('shows the create form and stores a food product', function () {
+    $this->get(route('foods.create'))
+        ->assertOk()
+        ->assertSee('Tambah Makanan')
+        ->assertSee('name="name"', false);
+
+    $this->post(route('foods.store'), [
+        'name' => 'Nasi Goreng',
+        'category' => 'Makanan Berat',
+        'price' => '25000',
+        'stock' => '12',
+    ])->assertRedirect(route('foods.index'))
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseHas('foods', [
+        'name' => 'Nasi Goreng',
+        'category' => 'Makanan Berat',
+        'price' => 25000,
+        'stock' => 12,
+    ]);
+});
+
+it('rejects invalid food data when creating a product', function () {
+    $this->post(route('foods.store'), [
+        'name' => '',
+        'category' => 'Kategori tidak valid',
+        'price' => '-1',
+        'stock' => '-3',
+    ])->assertSessionHasErrors(['name', 'category', 'price', 'stock']);
+
+    $this->assertDatabaseCount('foods', 0);
+});

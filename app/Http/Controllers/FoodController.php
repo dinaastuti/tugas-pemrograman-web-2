@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -34,6 +35,34 @@ class FoodController extends Controller
             'filters' => $filters,
             'hasFilters' => $request->query() !== [],
             'hasSearchFilters' => filled($filters['search'] ?? null) || filled($filters['category'] ?? null),
+        ]);
+    }
+
+    public function create(): View
+    {
+        return view('foods.form', [
+            'food' => new Food,
+            'categories' => Food::CATEGORIES,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        Food::create($this->validatedData($request));
+
+        return redirect()->route('foods.index')->with('success', 'Makanan berhasil ditambahkan.');
+    }
+
+    /**
+     * @return array{name: string, category: string, price: string, stock: int}
+     */
+    private function validatedData(Request $request): array
+    {
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', Rule::in(Food::CATEGORIES)],
+            'price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:9999999999.99'],
+            'stock' => ['required', 'integer', 'min:0', 'max:2147483647'],
         ]);
     }
 }
