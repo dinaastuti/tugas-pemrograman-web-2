@@ -132,3 +132,13 @@ it('shows the edit form and updates an existing food product', function () {
         'stock' => 4,
     ]);
 });
+
+it('deletes an existing food product', function () {
+    $food = Food::factory()->create();
+
+    $this->delete(route('foods.destroy', $food))
+        ->assertRedirect(route('foods.index'))
+        ->assertSessionHas('success', 'Makanan berhasil dihapus.');
+
+    $this->assertDatabaseMissing('foods', ['id' => $food->id]);
+});

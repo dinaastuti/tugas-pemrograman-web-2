@@ -8,3 +8,4 @@ Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.crea
 Route::post('/foods', [FoodController::class, 'store'])->name('foods.store');
 Route::get('/foods/{food}/edit', [FoodController::class, 'edit'])->name('foods.edit');
 Route::put('/foods/{food}', [FoodController::class, 'update'])->name('foods.update');
+Route::delete('/foods/{food}', [FoodController::class, 'destroy'])->name('foods.destroy');

@@ -68,6 +68,13 @@ class FoodController extends Controller
         return redirect()->route('foods.index')->with('success', 'Perubahan makanan berhasil disimpan.');
     }
 
+    public function destroy(Food $food): RedirectResponse
+    {
+        $food->delete();
+
+        return redirect()->route('foods.index')->with('success', 'Makanan berhasil dihapus.');
+    }
+
     /**
      * @return array{name: string, category: string, price: string, stock: int}
      */

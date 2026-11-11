@@ -59,6 +59,12 @@
                             <td>{{ $food->stock }}</td>
                             <td>
                                 <a href="{{ route('foods.edit', $food) }}" class="btn btn-warning">Edit</a>
+                                <form class="d-inline" action="{{ route('foods.destroy', $food) }}" method="POST"
+                                    data-confirm="Hapus {{ $food->name }} dari daftar makanan?">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
